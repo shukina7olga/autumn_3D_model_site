@@ -21,16 +21,27 @@ const timer = (deadline) => {
         }
     }
 
+    const addZero = (num) => {
+        return num < 10 ? '0' + num : num
+    }
+
     const updateClock = () => {
         let getTime = getTimeRemaining()
-        timerHours.textContent = getTime.hours
-        timerMinutes.textContent = getTime.minutes
-        timerSeconds.textContent = getTime.seconds    
         
-        if (getTime.timeRemaining > 0) {
-            setTimeout(updateClock, 1000)
+        if (getTime.timeRemaining <= 0) {  
+            timerHours.textContent = '00'
+            timerMinutes.textContent = '00'
+            timerSeconds.textContent = '00'
+            clearInterval(intervalId)
+            return
         }
+
+        timerHours.textContent = addZero(getTime.hours)
+        timerMinutes.textContent = addZero(getTime.minutes)
+        timerSeconds.textContent = addZero(getTime.seconds)
     }
+
+    const intervalId = setInterval(updateClock, 1000)
     updateClock()
 }
 
