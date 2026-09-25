@@ -1,3 +1,5 @@
+import { animate } from "./helpers"
+
 const slider = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block')
     const calcType = document.querySelector('.calc-type')
@@ -5,6 +7,8 @@ const slider = (price = 100) => {
     const calcCount = document.querySelector('.calc-count')
     const calcDay = document.querySelector('.calc-day')
     const total = document.getElementById('total')
+
+    let currentTotal = 0
 
     const countCalc = () => {
         const calcTypeValue = +calcType.options[calcType.selectedIndex].value
@@ -30,7 +34,21 @@ const slider = (price = 100) => {
             totalValue = 0
         }
 
-        total.textContent = totalValue
+        const startValue = currentTotal
+        const endValue = totalValue
+
+        animate({
+            duration: 500,
+            timing(timeFraction) {
+                return timeFraction;
+            },
+            draw(progress) {
+                const value = startValue+(endValue-startValue)*progress
+                total.textContent = Math.round(value)
+            }
+        });
+
+        currentTotal = totalValue
     }
 
     calcBlock.addEventListener('input', (e) => {
