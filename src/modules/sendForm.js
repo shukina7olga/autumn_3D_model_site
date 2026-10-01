@@ -5,15 +5,40 @@ const sendForm = ({formId, someElem = []}) => {
     const errorText = 'Ошибка'
     const successText = 'Спасибо! Менеджер свяжется с вами.'
 
+    const checkEnteringInput = () => {
+        //name="user_phone" разрешить ввод только цифр, знака “+”, круглых скобок и дефис
+        const phoneInputs = form.querySelectorAll('[name="user_phone"]')
+        phoneInputs.forEach(input => {
+            input.addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/[^0-9\+\(\)\-]/g, '')
+            })
+        })
+
+        //name="user_name" разрешить ввод только кириллицы и пробелов
+        const nameInputs = form.querySelectorAll('[name="user_name"]')
+        nameInputs.forEach(input => {
+            input.addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/[^а-я\s]/gi, '')
+            })
+        })
+
+        //name="user_message" разрешить только кириллицу, пробелы, цифры и знаки препинания.
+        const messageInputs = form.querySelectorAll('[name="user_message"]')
+        messageInputs.forEach(input => {
+            input.addEventListener('input', e => {
+                // Разрешаем: кириллицу, цифры, пробелы и основные знаки препинания
+                e.target.value = e.target.value.replace(/[^а-я0-9\s\.\,\!\?\-\:\;\"\'\(\)]/gi, '')
+            })
+        })
+    }
+
     const validate = (list) => {
         let success = true
 
-        // list.forEach(input => {
-        //     if (!input.classList.contains('success')) {
-        //         success = false
-        //     }
-        // })
-
+        list.forEach(el => {
+            console.log(el.value)
+        })
+        
         return success
     }
 
@@ -65,12 +90,9 @@ const sendForm = ({formId, someElem = []}) => {
             alert('Не валидны данные(')
         }
 
-        sendData(formBody).then(data => {
-            formElements.forEach(input => {
-                input.value = ''
-            })
-        })
     }
+
+    checkEnteringInput()
 
     try {
         if (!form) {
